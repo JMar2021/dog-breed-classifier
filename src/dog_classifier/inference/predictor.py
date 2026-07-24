@@ -1,7 +1,15 @@
+import torch
 from dog_classifier.schemas.prediction import PredictionResult
+from dog_classifier.inference.preprocessing import ImagePreprocessor
+from dog_classifier.inference.model import LoadedModel
 
 class InferenceService:
     """Service for performing inference on dog breed images."""
+    def __init__(self, loaded_model: LoadedModel):
+        self.model = loaded_model.model
+        self.weights = loaded_model.weights
+        self.preprocessor = ImagePreprocessor(self.weights)
+        self.categories = self.weights.meta["categories"]
 
     def predict(self, image_path: str) -> PredictionResult:
         """
@@ -13,5 +21,10 @@ class InferenceService:
         Returns:
             PredictionResult: The prediction result.
         """
-        # Placeholder implementation - replace with actual inference logic
-        return PredictionResult(breed="Golden Retriever", confidence=0.95)
+        image = self.preprocessor.process(image_path)
+        with torch.no_grad():
+            output = self.model(image)
+        probabilities = torch.nn.functional.softmax(output[0], dim=0)
+        confidence, index = torch.max(probabilities, dim=0)
+        breed = self.categories[index]
+        return PredictionResult(breed=breed, confidence=float(confidence))

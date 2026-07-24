@@ -1,7 +1,8 @@
 import typer
 from pathlib import Path
-from dog_classifier.inference.predictor import InferenceService
+from dog_classifier.application import Application
 app = typer.Typer()
+application = Application()
 
 @app.command()
 def version():
@@ -17,8 +18,7 @@ def predict(image_path: str):
     if not Path(image_path).exists():
         typer.echo(f"Error: The file '{image_path}' does not exist.")
         raise typer.Exit(code=1)
-    service = InferenceService()
-    result = service.predict(image_path)
+    result = application.inference_service.predict(image_path)
     typer.echo(f"Predicted Breed: {result.breed}")
     typer.echo(f"Confidence: {result.confidence}")
 
