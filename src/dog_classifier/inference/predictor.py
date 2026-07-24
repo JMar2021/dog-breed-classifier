@@ -2,6 +2,9 @@ import torch
 from dog_classifier.schemas.prediction import PredictionResult
 from dog_classifier.inference.preprocessing import ImagePreprocessor
 from dog_classifier.inference.model import LoadedModel
+from dog_classifier.core.logger import get_logger
+
+logger = get_logger(__name__)
 
 class InferenceService:
     """Service for performing inference on dog breed images."""
@@ -27,4 +30,5 @@ class InferenceService:
         probabilities = torch.nn.functional.softmax(output[0], dim=0)
         confidence, index = torch.max(probabilities, dim=0)
         breed = self.categories[index]
+        logger.info("Prediction complete: breed=%s confidence=%.2f", breed, confidence) 
         return PredictionResult(breed=breed, confidence=float(confidence))
