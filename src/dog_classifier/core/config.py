@@ -1,11 +1,8 @@
 from pydantic_settings import BaseSettings
+from pydantic import ConfigDict
 
 
 class Settings(BaseSettings):
-    """
-    Application configuration.
-    Values can come from environment variables.
-    """
 
     app_name: str = "Dog Breed Classifier API"
 
@@ -15,7 +12,9 @@ class Settings(BaseSettings):
 
     model_name: str = "resnet50"
 
-    class Config:
-        env_file = ".env"
+    model_config = ConfigDict(
+        env_file=".env"
+    )
+
 
 settings = Settings()

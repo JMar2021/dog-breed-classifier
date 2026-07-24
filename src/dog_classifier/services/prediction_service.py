@@ -2,8 +2,9 @@ from pathlib import Path
 import shutil
 import tempfile
 
-from fastapi import HTTPException, UploadFile
+from fastapi import UploadFile
 from dog_classifier.core.logger import get_logger
+from dog_classifier.core.exceptions import InferenceError, DogClassifierError
 from dog_classifier.inference.predictor import InferenceService
 from dog_classifier.schemas.api.prediction import PredictionResult
 
@@ -33,10 +34,9 @@ class PredictionService:
 
             return result
 
-        except Exception:
+        except DogClassifierError as e:
+            raise e
+        
+        except Exception as e:
             logger.exception("Prediction failed")
-
-            raise HTTPException(
-                status_code=500,
-                detail="Failed to process the uploaded file.",
-            )
+            raise InferenceError("Failed to process the uploaded file.") from e
