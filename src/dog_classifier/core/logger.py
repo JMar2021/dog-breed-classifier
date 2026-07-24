@@ -1,8 +1,10 @@
 import logging
+from dog_classifier.core.config import settings
 
 def configure_logging() -> None:
+    level = getattr(logging, settings.log_level.upper())    
     logging.basicConfig(
-        level=logging.INFO,
+        level=level,
         format=(
             "%(asctime)s "
             "%(levelname)s "

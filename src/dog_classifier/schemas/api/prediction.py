@@ -1,7 +1,6 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
 
-@dataclass
-class PredictionResult:
+class PredictionResult(BaseModel):
     """Prediction result schema."""
     breed: str
     confidence: float

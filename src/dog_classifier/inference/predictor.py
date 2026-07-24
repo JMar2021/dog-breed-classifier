@@ -1,5 +1,5 @@
 import torch
-from dog_classifier.schemas.prediction import PredictionResult
+from dog_classifier.schemas.api.prediction import PredictionResult
 from dog_classifier.inference.preprocessing import ImagePreprocessor
 from dog_classifier.inference.model import LoadedModel
 from dog_classifier.core.logger import get_logger
