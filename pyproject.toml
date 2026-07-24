@@ -1,0 +1,24 @@
+[project]
+name = "dog-breed-classifier"
+version = "0.1.0"
+description = "Production-style ML inference platform"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pillow>=12.3.0",
+    "typer>=0.27.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dog_classifier"]
+
+[dependency-groups]
+dev = [
+    "mypy>=2.3.0",
+    "pytest>=9.1.1",
+    "ruff>=0.16.0",
+]
