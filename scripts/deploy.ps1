@@ -8,7 +8,7 @@ $image = "ghcr.io/jmar2021/dog-breed-classifier:$ImageTag"
 Write-Host "Deploying $image"
 
 
-helm upgrade dog-classifier ./charts/dog-classifier `
+helm upgrade dog-classifier ./dog-classifier `
     --namespace dog-classifier `
     --set image.tag=$ImageTag `
     --install
