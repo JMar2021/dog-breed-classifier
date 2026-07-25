@@ -1,4 +1,4 @@
-name: Tests
+name: CI/CD Pipeline
 
 on:
   push:
@@ -42,6 +42,8 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.image_tag.outputs.tag }}
 
     steps:
       - name: Checkout code
@@ -70,13 +72,25 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      
+      - name: Extract image tag
+        id: image_tag
+        shell: bash
+        run: |
+          TAG=$(echo "${{ steps.meta.outputs.tags }}" | grep sha- | sed 's|ghcr.io/jmar2021/dog-breed-classifier:||')
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
 
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
-      - name: Deploy placeholder
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Kubernetes
+        shell: pwsh
         run: |
-          echo "Deployment will happen here"
+          ./scripts/deploy.ps1 `
+            -ImageTag "${{ needs.build.outputs.image_tag }}"
