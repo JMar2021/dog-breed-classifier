@@ -1,0 +1,37 @@
+services:
+
+  api:
+    image: dog-breed-classifier
+    container_name: dog-classifier-api
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+
+  prometheus:
+    image: prom/prometheus
+    container_name: dog-classifier-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-storage:/prometheus
+    restart: unless-stopped
+
+
+  grafana:
+    image: grafana/grafana
+    container_name: dog-classifier-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+volumes:
+  grafana-storage:
+  prometheus-storage:

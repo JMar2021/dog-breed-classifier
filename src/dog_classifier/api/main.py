@@ -1,9 +1,11 @@
 from fastapi import FastAPI, UploadFile, File
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
+from prometheus_client import generate_latest
 from dog_classifier.application import Application
 from dog_classifier.core.logger import get_logger
 from dog_classifier.schemas.api.prediction import PredictionResult
 from dog_classifier.core.config import settings
+from dog_classifier.core.state import state
 from dog_classifier.core.exceptions import InferenceError, InvalidImageError
 
 logger = get_logger(__name__)
@@ -33,13 +35,28 @@ async def general_exception_handler(request, exc: Exception):
         status_code=500,
         content={"error": "An unexpected error occurred."}
     )
-
+@app.get("/ready")
+def readiness():
+    logger.info("Readiness check requested")
+    if state.model_loaded:
+        return {"status": "ready"}
+    else:
+        return JSONResponse(
+            status_code=503,
+            content={"status": "not ready"}
+        )
+    
 @app.get("/health")
 def health():
     logger.info("Health check requested")
     return {
-        "status": "healthy"
+        "status": "alive"
     }
+
+@app.get("/metrics")
+def metrics():
+    logger.info("Metrics requested")
+    return Response(generate_latest(), media_type="text/plain; version=0.0.4; charset=utf-8")
 
 @app.post("/predict", response_model=PredictionResult)
 async def predict(file: UploadFile = File(...)):

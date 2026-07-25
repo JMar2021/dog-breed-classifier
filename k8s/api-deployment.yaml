@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: classifier-api
+  namespace: dog-classifier
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: classifier-api
+
+  template:
+    metadata:
+      labels:
+        app: classifier-api
+
+    spec:
+      containers:
+
+      - name: classifier-api
+
+        image: dog-breed-classifier:latest
+
+        imagePullPolicy: Never
+
+        ports:
+        - containerPort: 8000
+      
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "2"
+            memory: "2Gi"

@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: "dog-classifier"
+    orgId: 1
+    folder: "Dog Classifier"
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards
