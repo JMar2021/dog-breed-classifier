@@ -1,0 +1,22 @@
+name: Deploy to Kubernetes
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Docker image tag to deploy (example: sha-abc123)"
+        required: true
+        default: "latest"
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy application
+        shell: powershell
+        run: |
+          ./scripts/deploy.ps1 -ImageTag "${{ github.event.inputs.image_tag }}"
