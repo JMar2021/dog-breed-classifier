@@ -6,7 +6,7 @@ metadata:
   namespace: dog-classifier
 
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
 
   selector:
     matchLabels:
@@ -22,8 +22,8 @@ spec:
 
       - name: classifier-api
 
-        image: ghcr.io/jmar2021/dog-breed-classifier:sha-placeholder
-        imagePullPolicy: Always
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
 
         envFrom:
         - configMapRef:
