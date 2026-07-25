@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: classifier-config
+  namespace: dog-classifier
+
+data:
+  APP_NAME: "Dog Breed Classifier API"
+  VERSION: "0.1"
+  LOG_LEVEL: "INFO"
+  MODEL_NAME: "resnet50"

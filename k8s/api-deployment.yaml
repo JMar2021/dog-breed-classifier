@@ -25,6 +25,10 @@ spec:
         image: ghcr.io/jmar2021/dog-breed-classifier:sha-placeholder
         imagePullPolicy: Always
 
+        envFrom:
+        - configMapRef:
+            name: classifier-config
+
         ports:
         - containerPort: 8000
       
@@ -32,15 +36,17 @@ spec:
           httpGet:
             path: /health
             port: 8000
-          initialDelaySeconds: 20
-          periodSeconds: 10
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 3
 
         livenessProbe:
           httpGet:
             path: /health
             port: 8000
-          initialDelaySeconds: 60
-          periodSeconds: 20
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          failureThreshold: 3
         
         resources:
           requests:
