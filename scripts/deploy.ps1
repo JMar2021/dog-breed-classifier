@@ -1,23 +1,18 @@
 param(
     [Parameter(Mandatory=$true)]
-    [string]$ImageTag
-)
-
-$image = "ghcr.io/jmar2021/dog-breed-classifier:$ImageTag"
-
-Write-Host "Deploying $image"
-
-
-param(
-    [Parameter(Mandatory=$true)]
     [string]$ImageTag,
 
     [string]$Environment="dev"
 )
 
+$image = "ghcr.io/jmar2021/dog-breed-classifier:$ImageTag"
+
+Write-Host "Deploying $image"
+Write-Host "Deploying environment: $Environment"
+
+
 $valuesFile = "./dog-classifier/values-$Environment.yaml"
 
-Write-Host "Deploying environment: $Environment"
 Write-Host "Using values: $valuesFile"
 
 
