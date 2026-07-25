@@ -1,0 +1,16 @@
+replicaCount: 3
+
+image:
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: "1000m"
+    memory: "1Gi"
+
+  limits:
+    cpu: "2"
+    memory: "2Gi"
+
+config:
+  logLevel: INFO

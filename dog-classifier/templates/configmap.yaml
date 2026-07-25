@@ -7,5 +7,5 @@ metadata:
 data:
   APP_NAME: "Dog Breed Classifier API"
   VERSION: "0.1"
-  LOG_LEVEL: "INFO"
+  LOG_LEVEL: {{ .Values.config.logLevel }}
   MODEL_NAME: "resnet50"

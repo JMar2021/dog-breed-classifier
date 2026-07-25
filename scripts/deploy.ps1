@@ -8,8 +8,22 @@ $image = "ghcr.io/jmar2021/dog-breed-classifier:$ImageTag"
 Write-Host "Deploying $image"
 
 
+param(
+    [Parameter(Mandatory=$true)]
+    [string]$ImageTag,
+
+    [string]$Environment="dev"
+)
+
+$valuesFile = "./dog-classifier/values-$Environment.yaml"
+
+Write-Host "Deploying environment: $Environment"
+Write-Host "Using values: $valuesFile"
+
+
 helm upgrade dog-classifier ./dog-classifier `
     --namespace dog-classifier `
+    --values $valuesFile `
     --set image.tag=$ImageTag `
     --install
 

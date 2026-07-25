@@ -49,9 +49,4 @@ spec:
           failureThreshold: 3
         
         resources:
-          requests:
-            cpu: "500m"
-            memory: "512Mi"
-          limits:
-            cpu: "2"
-            memory: "2Gi"
+          {{- toYaml .Values.resources | nindent 10 }}
