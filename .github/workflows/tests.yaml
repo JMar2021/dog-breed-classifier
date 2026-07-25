@@ -50,8 +50,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: |
-            ghcr.io/jmar2021/dog-breed-classifier:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
       
       
       - name: Extract metadata
@@ -59,3 +59,6 @@ jobs:
         id: meta
         with:
           images: ghcr.io/jmar2021/dog-breed-classifier
+          tags: |
+            type=raw,value=latest
+            type=sha
